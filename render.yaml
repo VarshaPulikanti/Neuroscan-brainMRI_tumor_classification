@@ -1,0 +1,24 @@
+# Free-tier Render web service (SQLite)
+services:
+  - type: web
+    name: neuroscan-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-api.txt
+    startCommand: uvicorn app.api:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: DATABASE_URL
+        value: sqlite:///./data/neuroscan.db
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false
+      - key: CHECKPOINT_PATH
+        value: outputs/checkpoints/best_model.pth
+      - key: LOAD_MODEL_ON_STARTUP
+        value: "0"
