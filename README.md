@@ -1,15 +1,13 @@
-# NeuroScan
+# NeuroScan — Brain MRI Tumor Classification
 
-Brain MRI tumor classification project. I fine-tuned EfficientNet-B0 to classify scans into glioma, meningioma, pituitary tumor, or no tumor, and added Grad-CAM so you can see what the model is looking at.
+End-to-end app that classifies brain MRI scans into **glioma**, **meningioma**, **pituitary tumor**, or **no tumor**. A fine-tuned EfficientNet-B0 model returns class probabilities, and Grad-CAM heatmaps show which regions influenced the prediction.
 
-I also built a small full-stack app around it: React frontend, FastAPI backend, user accounts, and scan history.
+The UI is React + TypeScript. The backend serves inference, JWT login, and scan history stored with SQL.
 
-**Live demo:** [https://neuroscan-application.vercel.app](https://neuroscan-application.vercel.app)  
-**API:** [https://neuroscan-application.onrender.com](https://neuroscan-application.onrender.com) · [docs](https://neuroscan-application.onrender.com/docs)
-
+**Repo:** [github.com/VarshaPulikanti/Neuroscan-brainMRI_tumor_classification](https://github.com/VarshaPulikanti/Neuroscan-brainMRI_tumor_classification)  
 **Dataset:** [Brain Tumor MRI (Kaggle)](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
 
-> For research / learning only — not for medical diagnosis.
+> For research and learning only — not for medical diagnosis.
 
 ---
 
@@ -36,14 +34,14 @@ Per-class F1: glioma 0.92 · meningioma 0.95 · no tumor 0.96 · pituitary 0.99
 | Explainability | Grad-CAM |
 | Backend | FastAPI + PyTorch |
 | Frontend | React + TypeScript (Vite) |
-| Auth / history | JWT + SQLite |
+| Auth / history | JWT + SQL (SQLite) |
 
 ---
 
 ## Project structure
 
 ```text
-├── app/                 # FastAPI (auth, predict, scan history)
+├── app/                 # API: auth, predict, scan history
 ├── frontend/            # React UI
 ├── src/                 # Model, training, Grad-CAM, DB
 ├── scripts/             # Dataset download
@@ -51,9 +49,8 @@ Per-class F1: glioma 0.92 · meningioma 0.95 · no tumor 0.96 · pituitary 0.99
 ├── evaluate.py
 ├── predict.py
 ├── config.yaml
-├── render.yaml          # Render free web service
 ├── requirements.txt     # Full install (train + API)
-├── requirements-api.txt # Lean install for Render
+├── requirements-api.txt # Lean install for the API
 ├── start_web.ps1        # Run API + frontend locally
 └── start_web.bat
 ```
@@ -66,7 +63,7 @@ Per-class F1: glioma 0.92 · meningioma 0.95 · no tumor 0.96 · pituitary 0.99
 pip install -r requirements.txt
 ```
 
-The trained checkpoint `outputs/checkpoints/best_model.pth` is in the repo, so you can run the web app / API without training first.
+The trained checkpoint `outputs/checkpoints/best_model.pth` is in the repo, so you can run the web app without training first.
 
 Download data only if you want to train or evaluate yourself:
 
@@ -104,9 +101,9 @@ Config is in `config.yaml`. If you run out of memory on CPU, lower `batch_size` 
 .\start_web.bat
 ```
 
-- UI: http://localhost:5173  
-- API: http://localhost:8080  
-- Docs: http://localhost:8080/docs  
+- UI: http://localhost:5173
+- API: http://localhost:8080
+- Docs: http://localhost:8080/docs
 
 Or separately:
 
@@ -117,7 +114,7 @@ Or separately:
 
 Sign up / log in if you want scans saved to history. You can still classify without an account.
 
-Build frontend + serve from API (optional):
+Build frontend + serve from the API (optional):
 
 ```bash
 cd frontend && npm install && npm run build && cd ..
@@ -128,31 +125,30 @@ uvicorn app.api:app --host 0.0.0.0 --port 8080
 
 ## Deploy
 
-I deploy this as two free services:
+Connect this GitHub repo when you deploy:
 
-| Part | Host | Notes |
-|------|------|--------|
-| Frontend | [Vercel](https://neuroscan-application.vercel.app) | Root directory: `frontend/` |
-| API | [Render](https://neuroscan-application.onrender.com) | Free web service + SQLite |
+[https://github.com/VarshaPulikanti/Neuroscan-brainMRI_tumor_classification](https://github.com/VarshaPulikanti/Neuroscan-brainMRI_tumor_classification)
 
-**Render (free)**
+| Part | Typical host | Notes |
+|------|----------------|-------|
+| Frontend | Vercel | Root directory: `frontend/` |
+| API | Render | Python web service |
 
-1. New → **Web Service** (no paid database)
-2. Connect this GitHub repo, runtime Python, instance **Free**
-3. Build: `pip install -r requirements-api.txt`
-4. Start: `uvicorn app.api:app --host 0.0.0.0 --port $PORT --workers 1`
-5. Env vars:
+**API host**
+
+1. New web service, Python runtime
+2. Build: `pip install -r requirements-api.txt`
+3. Start: `uvicorn app.api:app --host 0.0.0.0 --port $PORT --workers 1`
+4. Env vars:
    - `DATABASE_URL` = `sqlite:///./data/neuroscan.db`
-   - `JWT_SECRET` = any long random string
+   - `JWT_SECRET` = a long random string
    - `CHECKPOINT_PATH` = `outputs/checkpoints/best_model.pth`
-   - `CORS_ORIGINS` = your Vercel URL
-6. Free instances sleep when idle — first request can be slow  
-   Scan history may reset after restarts (ephemeral disk)
+   - `CORS_ORIGINS` = your frontend URL
 
-**Vercel (free)**
+**Frontend host**
 
 1. Import the repo, root = `frontend`
-2. Set `VITE_API_URL` to your Render API URL (no trailing slash)
+2. Set `VITE_API_URL` to your API URL (no trailing slash)
 3. Redeploy after changing env vars
 
 Env examples: `.env.example`, `frontend/.env.example`
@@ -176,6 +172,6 @@ patience: 5
 
 ## Outputs after training
 
-- `outputs/checkpoints/best_model.pth` — best weights  
-- `outputs/training_history.png` — loss / accuracy curves  
-- `outputs/confusion_matrix.png` — after `evaluate.py`  
+- `outputs/checkpoints/best_model.pth` — best weights
+- `outputs/training_history.png` — loss / accuracy curves
+- `outputs/confusion_matrix.png` — after `evaluate.py`
