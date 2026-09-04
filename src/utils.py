@@ -7,7 +7,6 @@ import torch
 import torch.nn as nn
 
 from src.models.efficientnet import build_efficientnet_b0
-from src.models.resnet import build_resnet18
 
 
 def get_device() -> torch.device:
@@ -21,9 +20,7 @@ def get_device() -> torch.device:
 def build_model(model_name: str, num_classes: int) -> nn.Module:
     if model_name == "efficientnet_b0":
         return build_efficientnet_b0(num_classes=num_classes)
-    if model_name == "resnet18":
-        return build_resnet18(num_classes=num_classes)
-    raise ValueError(f"Unknown model: {model_name}. Use efficientnet_b0 or resnet18.")
+    raise ValueError(f"Unknown model: {model_name}. Use efficientnet_b0.")
 
 
 def save_checkpoint(

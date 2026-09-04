@@ -485,8 +485,8 @@ function App() {
             <h3>Deep Learning Stack</h3>
             <ul>
               <li>
-                Fine-tuned <strong>EfficientNet-B0</strong> (or ResNet-18) with
-                transfer learning
+                Fine-tuned <strong>EfficientNet-B0</strong> with transfer
+                learning
               </li>
               <li>Data augmentation, early stopping, learning-rate scheduling</li>
               <li>

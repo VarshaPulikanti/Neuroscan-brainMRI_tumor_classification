@@ -15,7 +15,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model",
         type=str,
-        choices=["efficientnet_b0", "resnet18"],
+        choices=["efficientnet_b0"],
         default=None,
         help="Override model architecture",
     )

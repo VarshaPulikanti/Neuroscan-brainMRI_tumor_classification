@@ -11,8 +11,6 @@ from PIL import Image
 def get_gradcam_target_layer(model: nn.Module, model_name: str) -> nn.Module:
     if model_name == "efficientnet_b0":
         return model.features[-1]
-    if model_name == "resnet18":
-        return model.layer4[-1]
     raise ValueError(f"No Grad-CAM target layer defined for model: {model_name}")
 
 

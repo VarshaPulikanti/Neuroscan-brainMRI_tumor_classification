@@ -29,7 +29,7 @@ Per-class F1: glioma 0.92 · meningioma 0.95 · no tumor 0.96 · pituitary 0.99
 
 | Part | What I used |
 |------|-------------|
-| Model | EfficientNet-B0 (ImageNet pretrained), optional ResNet-18 |
+| Model | EfficientNet-B0 (ImageNet pretrained) |
 | Training | Augmentation, AdamW, LR scheduling, early stopping |
 | Explainability | Grad-CAM |
 | Backend | FastAPI + PyTorch |

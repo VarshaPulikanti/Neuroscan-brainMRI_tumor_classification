@@ -8,7 +8,7 @@ class_names:
   - pituitary
 
 image_size: 224
-model: efficientnet_b0  # options: efficientnet_b0, resnet18
+model: efficientnet_b0
 
 epochs: 15
 batch_size: 16
