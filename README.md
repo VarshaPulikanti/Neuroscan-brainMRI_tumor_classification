@@ -47,7 +47,6 @@ Per-class F1: glioma 0.92 · meningioma 0.95 · no tumor 0.96 · pituitary 0.99
 ├── scripts/             # Dataset download
 ├── train.py
 ├── evaluate.py
-├── predict.py
 ├── config.yaml
 ├── requirements.txt     # Full install (train + API)
 ├── requirements-api.txt # Lean install for the API
@@ -81,12 +80,11 @@ data/brain_tumor_mri/
 
 ---
 
-## Train / eval / CLI predict
+## Train / eval
 
 ```bash
 python train.py
 python evaluate.py
-python predict.py path/to/mri.jpg --gradcam
 ```
 
 Config is in `config.yaml`. If you run out of memory on CPU, lower `batch_size` (e.g. to `8`).
